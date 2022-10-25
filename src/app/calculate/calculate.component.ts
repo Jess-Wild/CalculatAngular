@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Number } from '../number';
+
 
 @Component({
   selector: 'app-calculate',
@@ -8,54 +8,49 @@ import { Number } from '../number';
 })
 export class CalculateComponent implements OnInit {
 
-  value:string = '';
-  result:string = '';
-  operand1 = 0;
-  operand2 = 0;
-  operator = '';
-  calculationString = '';
-  operatorResult= false;
+defaultResult = '0';
+number: number = 0;
+operator: string | null = null;
   
-  operatorSet=false;
-  
-  pressKey(key:string) {
-    this.operand1 = parseFloat(this.value);
-    this.operand2 = parseFloat(this.value);
-    this.operator = key;
-      this.operatorSet = true;
-      this.value += key;
-      console.log('this.operand1 :>> ', this.operand1);
-      console.log('this.operand2 :>> ', this.operand2);
+  pressKey(value: string) {
+    if(this.defaultResult === '0'){
+      this.defaultResult = value.toString();
+    }else{
+      this.defaultResult = `${this.defaultResult}${value}`;
+    }
   }
-  // pressKey(key: string) {
-  //   if (key === '/' || key === 'x' || key === '-' || key === '+') {
-  //     const lastKey = this.result[this.result.length - 1];
-  //     if (lastKey === '/' || lastKey === 'x' || lastKey === '-' || lastKey === '+') {
-  //       this.operatorSet = true;
-  //     }
-  //     if ((this.operatorSet) || (this.result === '')) {
-  //       return;
-  //     }
-  //     this.operand1 = parseFloat(this.result);
-  //     this.operator = key;
-  //     this.operatorSet = true;
-  //   }
-  //   if (this.result.length === 10) {
-  //     return;
-  //   }
-  //   this.result += key;
-  // }
+
+  operation(operator: string | null){
+    this.number = parseFloat(this.defaultResult);
+    this.operator = operator;
+    this.defaultResult = ' ';
+  }
+
 
   getResult(){
-    this.calculationString = this.result;
-    this.operand2 = parseFloat(this.result.split(this.operator)[1]);
+    const a = this.number;
+    const b = parseFloat(this.defaultResult);
 
-    if(this.operator === "+"){
-      this.value = this.result;
-      this.result = (this.operand1 + this.operand2).toString();
-      this.value = this.calculationString;
-    }this.operatorResult=true;
+    let result: number = 0;
+
+    if(this.operator === '*'){
+      result = a * b;
+    }
+
+    if(this.operator === '/'){
+      result = a / b;
+    }
+    if(this.operator === '+'){
+      result = a + b;
+    }
+    if(this.operator === '-'){
+      result = a - b;
+    }
+
+    this.number = result;
+    this.defaultResult = result.toString();
   }
+
   
 
 
